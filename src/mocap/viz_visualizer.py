@@ -31,14 +31,23 @@ class VisualModel():
         proc, zmq_url, web_url = start_zmq_server_as_subprocess(server_args=server_args)
 
         viewer = meshcat.Visualizer(zmq_url=zmq_url)
+        
+#         viewer1 = meshcat.Visualizer(zmq_url=zmq_url)
 
         # Setup the visualizer
         self.viz = viz = pinocchio.visualize.MeshcatVisualizer(
             self.robot_o.model, self.robot_o.collision_model, self.robot_o.visual_model
         )
+#         self.viz1 = viz1 = pinocchio.visualize.MeshcatVisualizer(
+#             self.robot_o.model, self.robot_o.collision_model, self.robot_o.visual_model
+#         )
+        
         viz.initViewer(viewer)
         viz.loadViewerModel()
-
+        
+#         viz1.initViewer(viewer1)
+#         viz1.loadViewerModel()
+        
         lSole = 'l_foot'
         rSole = 'r_foot'
         torso = 'base_link'

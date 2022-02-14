@@ -1,26 +1,32 @@
-from qp import QpSolver
+from mocap.qp import QpSolver
 from scipy.interpolate import CubicSpline
 import numpy as np
 import matplotlib.pyplot as plt
 
 class MotionAdaptor(object):
-  def __init__(self, nj):
+  def __init__(self, nj, vel_bound, pos_bound_upper, pos_bound_lower, weightdict):
     '''
     A class to adapt data from Vicon motion data in human to humanoid
     by considering the position and velocity constraint and using second
     order dynamics
     '''
-
+    
     self.nj = nj
-    self.vel_bound = np.array([2.5]*self.nj)
-    self.pos_bound_upper = np.array([150./180.*3.14]*self.nj)
-    self.pos_bound_lower = np.array([0.0]*self.nj)
-    self.w_acceleration = 100000. #minimizing acceleration
-    self.w_tracking = 100. # track PD controller
-    self.w_vel = 100. # track velocity
+    self.vel_bound = vel_bound
+    self.pos_bound_upper = pos_bound_upper
+    self.pos_bound_lower = pos_bound_lower
+#     self.w_acceleration = 100000. #minimizing acceleration
+#     self.w_tracking = 100. # track PD controller
+#     self.w_vel = 100. # track velocity
 
-    self.p_tracking = 600000.
-    self.d_tracking = 200000.
+#     self.p_tracking = 600000.
+#     self.d_tracking = 200000.
+    self.w_acceleration = weightdict["w_acceleration"] #minimizing acceleration
+    self.w_tracking = weightdict["w_tracking"] # track PD controller
+    self.w_vel = weightdict["w_vel"] # track velocity
+
+    self.p_tracking = weightdict["p_tracking"]
+    self.d_tracking = weightdict["d_tracking"]
 
     self.acc_des = np.zeros(self.nj)
     self.vel_des = np.zeros(self.nj)
